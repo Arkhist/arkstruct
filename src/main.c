@@ -1,24 +1,17 @@
 #include <stdio.h>
+#include <string.h>
 
-#include "arkstruct/stack.h"
+#include "term_util.h"
 
-ARKSTACK_DEF(int);
+#include "stack_test.h"
+#include "stacks.h"
 
-void print(arkstack(int) stack)
-{
-    for(long int i = arkstack_len(stack); i > 0; i--)
-        printf("%d ", arkstack_pop(stack));
-    printf("\n");
-}
+
 
 int main(int argc, char** argv)
 {   
-    arkstack(int) stack = arkstack_create(int);
-    arkstack_push(stack, 3);
-    arkstack_push(stack, 1);
-    arkstack_push(stack, -100);
-    print(stack);
-    arkstack_free(stack);
-
-    return 0;
+    printf("\n");
+    int status = 0;
+    status |= test_stack();
+    return status;
 }

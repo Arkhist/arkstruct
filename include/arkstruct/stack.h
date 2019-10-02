@@ -6,7 +6,7 @@
 #define arkstack(type)                                                              \
     ARKSTACK_ ## type*
 
-#define ARKSTACK_DEF(type)                                                          \
+#define ARKSTACK_PROTO(type)                                                        \
     typedef struct ARKSTACK_ ## type  ARKSTACK_ ## type;                            \
     struct ARKSTACK_ ## type                                                        \
     {                                                                               \
@@ -21,6 +21,14 @@
         void (*freeFunc)(struct ARKSTACK_ ## type *stack);                          \
     };                                                                              \
                                                                                     \
+    int ARKSTACK_ ## type ## _push(struct ARKSTACK_ ## type *stack, type elem);     \
+    type ARKSTACK_ ## type ## _pop(struct ARKSTACK_ ## type *stack);                \
+    type ARKSTACK_ ## type ## _top(struct ARKSTACK_##type *stack);                  \
+    size_t ARKSTACK_ ## type ## _len(struct ARKSTACK_##type *stack);                \
+    void ARKSTACK_ ## type ## _free(struct ARKSTACK_ ## type *stack);               \
+    struct ARKSTACK_ ## type * ARKSTACK_ ## type ## _create();                                                                 
+
+#define ARKSTACK_DEF(type)                                                          \
     int ARKSTACK_ ## type ## _push(struct ARKSTACK_ ## type *stack, type elem)      \
     {                                                                               \
         stack->stack[stack->top++] = elem;                                          \
@@ -74,8 +82,8 @@
         r->lenFunc = ARKSTACK_ ## type ## _len;                                     \
         r->freeFunc = ARKSTACK_ ## type ## _free;                                   \
         return r;                                                                   \
-    }                                                                               
-                                                                                    
+    }      
+
 #define arkstack_push(astack, elem)                                                \
     astack->pushFunc(astack, elem)
 

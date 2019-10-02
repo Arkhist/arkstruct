@@ -10,11 +10,14 @@ else
   CFLAGS += -O3
 endif
 
+test: testarkstructs
+	./testarkstructs
+
 testarkstructs: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .SECONDEXPANSION:
-obj/%.o: src/%.c $$(wildcard include/*.h)
+obj/%.o: src/%.c $$(wildcard include/*.h) $$(wildcard src/*.h)
 	$(CC) -o $@ $< $(CFLAGS) -c
 
 .PHONY: clean
