@@ -56,7 +56,7 @@
         type r = queue->queue[queue->begin++];                                      \
         if(queue->begin >= queue->size/2)                                           \
         {                                                                           \
-            for(int i = queue->begin; i < queue->end; i++)                          \
+            for(size_t i = queue->begin; i < queue->end; i++)                       \
                 queue->queue[i - queue->begin] = queue->queue[i];                   \
             queue->end = queue->end - queue->begin;                                 \
             queue->begin = 0;                                                       \

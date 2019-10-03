@@ -66,6 +66,57 @@ Arkstruct's implementation of the Stack uses a dynamically allocated array of st
 
 ---
 
+### Queue
+
+#### How to use
+
+Header file : `arkstruct/queue.h`
+
+Prototype line : `ARKQUEUE_PROTO(type)`
+
+Definition line : `ARKQUEUE_DEF(type)`
+
+Available functions :
+
+- arkqueue_create(type) - *Returns a pointer to an arkqueue*
+- arkqueue_enqueue(queue, element) - *Enqueues an element at the end of the queue*
+- arkqueue_dequeue(queue) - *Removes and returns the first element of the queue. Undefined behavior if the queue is empty.*
+- arkqueue_end(queue) - *Returns the first element of the queue*
+- arkqueue_len(queue) - *Returns the size of the queue*
+- arkqueue_free(queue) - *Frees the queue*
+
+#### Example
+
+```C
+#include <stdio.h>
+#include "arkstruct/queue.h"
+
+ARKQUEUE_PROTO(int)
+ARKQUEUE_DEF(int)
+
+int main()
+{
+    arkqueue(int) queue = arkqueue_create(int);
+    arkqueue_enqueue(queue, 5);
+    arkqueue_enqueue(queue, 42);
+    printf("%d %d %d\n",
+        arkqueue_end(queue),      // 5
+        arkqueue_dequeue(queue),  // 5
+        arkqueue_dequeue(queue)); // 42
+    printf("%d\n", arkqueue_len(queue)); // 0
+    arkqueue_free(queue);
+    return 0;
+}
+```
+
+#### Implementation details
+
+Arkstruct's implementation of the Queue uses a dynamically allocated array of starting size 64, doubling in size every overflow.
+
+When the queue array is half empty, the queue's contents are pushed back to the beginning to the array to save space.
+
+---
+
 ## Tests
 
 To test the Data Structures, run the provided Makefile with `make` or `make test`.
