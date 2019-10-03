@@ -3,6 +3,9 @@
 #include <stdlib.h>
 
 
+#define ARKSTACK_DEFAULT_SIZE 64
+
+
 #define arkstack(type)                                                              \
     ARKSTACK_ ## type*
 
@@ -26,7 +29,7 @@
     type ARKSTACK_ ## type ## _top(struct ARKSTACK_##type *stack);                  \
     size_t ARKSTACK_ ## type ## _len(struct ARKSTACK_##type *stack);                \
     void ARKSTACK_ ## type ## _free(struct ARKSTACK_ ## type *stack);               \
-    struct ARKSTACK_ ## type * ARKSTACK_ ## type ## _create();                                                                 
+    struct ARKSTACK_ ## type * ARKSTACK_ ## type ## _create();
 
 #define ARKSTACK_DEF(type)                                                          \
     int ARKSTACK_ ## type ## _push(struct ARKSTACK_ ## type *stack, type elem)      \
@@ -58,7 +61,7 @@
         return stack->stack[stack->top-1];                                          \
     }                                                                               \
                                                                                     \
-    size_t ARKSTACK_ ## type ## _len(struct ARKSTACK_##type *stack)               \
+    size_t ARKSTACK_ ## type ## _len(struct ARKSTACK_##type *stack)                 \
     {                                                                               \
         return stack->top;                                                          \
     }                                                                               \
@@ -74,30 +77,30 @@
         struct ARKSTACK_ ## type *r = calloc(1, sizeof(struct ARKSTACK_ ## type));  \
         if(r == NULL)                                                               \
             return NULL;                                                            \
-        r->top = 0; r->size = 64;                                                   \
-        r->stack = calloc(64, sizeof(type));                                        \
+        r->top = 0; r->size = ARKSTACK_DEFAULT_SIZE;                                \
+        r->stack = calloc(ARKSTACK_DEFAULT_SIZE, sizeof(type));                     \
         r->pushFunc = ARKSTACK_ ## type ## _push;                                   \
         r->popFunc = ARKSTACK_ ## type ## _pop;                                     \
         r->topFunc = ARKSTACK_ ## type ## _top;                                     \
         r->lenFunc = ARKSTACK_ ## type ## _len;                                     \
         r->freeFunc = ARKSTACK_ ## type ## _free;                                   \
         return r;                                                                   \
-    }      
+    }
 
-#define arkstack_push(astack, elem)                                                \
+#define arkstack_push(astack, elem)                                                 \
     astack->pushFunc(astack, elem)
 
-#define arkstack_pop(astack)                                                       \
+#define arkstack_pop(astack)                                                        \
     astack->popFunc(astack)
 
-#define arkstack_top(astack)                                                       \
+#define arkstack_top(astack)                                                        \
     astack->topFunc(astack)
 
-#define arkstack_len(astack)                                                       \
+#define arkstack_len(astack)                                                        \
     astack->lenFunc(astack)
 
-#define arkstack_free(astack)                                                      \
+#define arkstack_free(astack)                                                       \
     astack->freeFunc(astack)
 
-#define arkstack_create(type)                                                      \
+#define arkstack_create(type)                                                       \
     ARKSTACK_ ## type ## _create()

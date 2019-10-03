@@ -6,6 +6,8 @@
 #include "stack_test.h"
 #include "stacks.h"
 
+#include "queue_test.h"
+
 
 
 int main(int argc, char** argv)
@@ -13,5 +15,6 @@ int main(int argc, char** argv)
     printf("\n");
     int status = 0;
     status |= test_stack();
+    status |= test_queue();
     return status;
 }
