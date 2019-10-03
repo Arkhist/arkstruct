@@ -17,8 +17,6 @@ The type of Data Structures must contain no illegal characters : `*`, for exampl
 
 ## Data Structures
 
----
-
 ### Stack
 
 #### How to use
@@ -42,6 +40,7 @@ Available functions :
 
 ```C
 #include <stdio.h>
+#include "arkstruct/stack.h"
 
 ARKSTACK_PROTO(int)
 ARKSTACK_DEF(int)

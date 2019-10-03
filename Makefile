@@ -1,4 +1,4 @@
-CC = clang
+CC = gcc
 AR = ar
 CFLAGS = -std=c11 -Wall -Wextra -I./include
 OBJ = $(patsubst src/%.c,obj/%.o,$(wildcard src/*.c))
