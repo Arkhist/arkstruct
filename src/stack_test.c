@@ -41,6 +41,7 @@ int test_stack()
     printf("%s%sOK%s%s\n", CSI, GREEN_COLOR, CSI, WHITE_COLOR);
 
     printf("\tFreeing stack1... ");
+    arkstack_shrink(stack1);
     arkstack_free(stack1);
     printf("%s%sOK%s%s\n", CSI, GREEN_COLOR, CSI, WHITE_COLOR);
 

@@ -21,6 +21,9 @@
         type (*popFunc)(struct ARKSTACK_ ## type *stack);                           \
         type (*topFunc)(struct ARKSTACK_ ## type *stack);                           \
         size_t (*lenFunc)(struct ARKSTACK_ ## type *stack);                         \
+                                                                                    \
+        int (*shrinkFunc)(struct ARKSTACK_## type *stack);                          \
+                                                                                    \
         void (*freeFunc)(struct ARKSTACK_ ## type *stack);                          \
     };                                                                              \
                                                                                     \
@@ -29,7 +32,8 @@
     type ARKSTACK_ ## type ## _top(struct ARKSTACK_##type *stack);                  \
     size_t ARKSTACK_ ## type ## _len(struct ARKSTACK_##type *stack);                \
     void ARKSTACK_ ## type ## _free(struct ARKSTACK_ ## type *stack);               \
-    struct ARKSTACK_ ## type * ARKSTACK_ ## type ## _create();
+    struct ARKSTACK_ ## type * ARKSTACK_ ## type ## _create();                      \
+    int ARKSTACK_ ## type ## _shrink(struct ARKSTACK_##type *stack);
 
 #define ARKSTACK_DEF(type)                                                          \
     int ARKSTACK_ ## type ## _push(struct ARKSTACK_ ## type *stack, type elem)      \
@@ -72,6 +76,24 @@
         free(stack);                                                                \
     }                                                                               \
                                                                                     \
+    int ARKSTACK_ ## type ## _shrink(struct ARKSTACK_##type *stack)                 \
+    {                                                                               \
+        if(stack->size/2 <= stack->top)                                             \
+            return 1;                                                               \
+        size_t x = stack->size;                                                     \
+        while(x > stack->top)                                                       \
+            x /= 2;                                                                 \
+        x *= 2;                                                                     \
+        if(x < ARKSTACK_DEFAULT_SIZE)                                               \
+            x = ARKSTACK_DEFAULT_SIZE;                                              \
+        type* newStack = realloc(stack->stack, x * sizeof(type));                   \
+        if(newStack == NULL)                                                        \
+            return 0;                                                               \
+        stack->stack = newStack;                                                    \
+        stack->size = x;                                                            \
+        return 1;                                                                   \
+    }                                                                               \
+                                                                                    \
     struct ARKSTACK_ ## type * ARKSTACK_ ## type ## _create()                       \
     {                                                                               \
         struct ARKSTACK_ ## type *r = calloc(1, sizeof(struct ARKSTACK_ ## type));  \
@@ -84,8 +106,10 @@
         r->topFunc = ARKSTACK_ ## type ## _top;                                     \
         r->lenFunc = ARKSTACK_ ## type ## _len;                                     \
         r->freeFunc = ARKSTACK_ ## type ## _free;                                   \
+        r->shrinkFunc = ARKSTACK_ ## type ## _shrink;                               \
         return r;                                                                   \
-    }
+    }                                                                               
+                                                                                    
 
 #define arkstack_push(astack, elem)                                                 \
     astack->pushFunc(astack, elem)
@@ -101,6 +125,9 @@
 
 #define arkstack_free(astack)                                                       \
     astack->freeFunc(astack)
+
+#define arkstack_shrink(astack)                                                     \
+    astack->shrinkFunc(astack)
 
 #define arkstack_create(type)                                                       \
     ARKSTACK_ ## type ## _create()

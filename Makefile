@@ -17,7 +17,7 @@ testarkstructs: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .SECONDEXPANSION:
-obj/%.o: src/%.c $$(wildcard include/*.h) $$(wildcard src/*.h)
+obj/%.o: src/%.c $$(wildcard include/arkstruct/*.h) $$(wildcard src/*.h)
 	$(CC) -o $@ $< $(CFLAGS) -c
 
 .PHONY: clean
