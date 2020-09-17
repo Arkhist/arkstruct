@@ -31,23 +31,13 @@
     };                                                                              \
                                                                                     \
     type ARKLIST_ ## type ## _data(struct ARKLIST_ ## type *list);                  \
-    int ARKLIST_ ## type ## _implem(struct ARKLIST_ ## type *list);                 
+    int ARKLIST_ ## type ## _implem(struct ARKLIST_ ## type *list);                 
 
 #define ARKLIST_DEF(type)                                                           \
     void ARKLIST_ ## type ## _set(struct ARKLIST_ ## type *list, type elem) {       \
         list->data = elem;                                                          \
         list->empty = 0;                                                            \
-    }                                                                               \
-                                                                                    \
-    struct ARKLIST_ ## type * ARKLIST_ ## type ## _create()                         \
-    {                                                                               \
-        struct ARKLIST_ ## type *r = calloc(1, sizeof(struct ARKLIST_ ## type));    \
-        if(r == NULL)                                                               \
-            return NULL;                                                            \
-        r->empty = 1; r->implem = ARKLIST_NO_IMPLEM;                                \
-        r->setFunc = ARKLIST_ ## type ## _set;                                      \
-        return r;                                                                   \
-    }
+    }                                                                               
 
 #define arklist_set(alist, elem)                                                    \
     alist->setFunc(alist, elem)
